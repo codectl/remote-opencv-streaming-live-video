@@ -5,5 +5,5 @@ The streaming process can be summed into the following steps:
 1. Capturing video image
 2. For each frame, encode the image
 3. Flush the data to the Webserver listening socket
-4. Decode the data into the image
+4. Decode the data into a jpeg image
 5. Serve the result in the web page
