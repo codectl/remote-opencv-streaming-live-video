@@ -8,9 +8,17 @@ The streaming process can be summed into the following steps:
 4. Deserialize the data into a jpeg image
 5. Serve the result in the web page
 
-The web framkework used for the webserver is [Flask](http://flask.pocoo.org/).
+The web framkework used for the webserver is [Flask](http://flask.pocoo.org/). For example purposes, we will be using laptop's webcam image straight away.
 
 ## Installation
 This example runs with Python. Also install the following Python dependencies (pip makes it dead simple):
 * opencv-python
 * flask
+
+## Usage
+1. Start the server and visit your browser at "http://<address>:<port>/video_feed"
+2. Start your client
+3. Check yourself on the server
+  
+## Credits
+The approach on how to serve the image on a webpage is taken from [this blog](http://blog.miguelgrinberg.com/post/video-streaming-with-flask).
