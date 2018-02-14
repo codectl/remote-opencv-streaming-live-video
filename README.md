@@ -22,7 +22,7 @@ This example runs with Python. Also install the following Python dependencies (p
 
 ## Usage
 1. Start the server and visit your browser at "http://&lt;address&gt;:&lt;port&gt;/video_feed"
-2. Start your client
+2. Start the client
 3. See the result in the browser
   
 ## Credits
