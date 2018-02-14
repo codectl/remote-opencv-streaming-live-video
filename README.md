@@ -16,7 +16,7 @@ This example runs with Python. Also install the following Python dependencies (p
 * flask
 
 ## Usage
-1. Start the server and visit your browser at "http://<address>:<port>/video_feed"
+1. Start the server and visit your browser at "http://&lt;address&gt;:&lt;port&gt;/video_feed"
 2. Start your client
 3. Check yourself on the server
   
