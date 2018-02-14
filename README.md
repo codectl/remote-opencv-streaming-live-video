@@ -21,4 +21,4 @@ This example runs with Python. Also install the following Python dependencies (p
 3. Check yourself on the server
   
 ## Credits
-The approach on how to serve the image on a webpage is taken from [this blog](http://blog.miguelgrinberg.com/post/video-streaming-with-flask).
+The approach on how to serve the video on a webpage is taken from [this blog](http://blog.miguelgrinberg.com/post/video-streaming-with-flask).
