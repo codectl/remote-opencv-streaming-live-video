@@ -10,7 +10,7 @@ The streaming process can be summed into the following steps:
 
 The web framkework used for the webserver is [Flask](http://flask.pocoo.org/). For example purposes, we will be using laptop's webcam image straight away.
 
-## Installation
+## Install
 This example runs with Python. Also install the following Python dependencies (pip makes it dead simple):
 * opencv-python
 * flask
@@ -22,3 +22,6 @@ This example runs with Python. Also install the following Python dependencies (p
   
 ## Credits
 The approach on how to serve the video on a webpage is taken from [this blog](http://blog.miguelgrinberg.com/post/video-streaming-with-flask).
+
+## License
+Code and documentation released under the [MIT License](https://github.com/rena2damas/remote-opencv-streaming-live-video/blob/master/LICENSE)
