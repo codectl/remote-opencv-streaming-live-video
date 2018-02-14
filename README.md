@@ -11,6 +11,6 @@ The streaming process can be summed into the following steps:
 The web framkework used for the webserver is [Flask](http://flask.pocoo.org/).
 
 ## Installation
-This example runs with Python. Also install the following Python dependencies:
+This example runs with Python. Also install the following Python dependencies (pip makes it dead simple):
 * opencv-python
 * flask
