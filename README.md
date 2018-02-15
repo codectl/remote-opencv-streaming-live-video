@@ -1,6 +1,6 @@
 # Remote streaming live video with Flask
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/rena2damas/sorted-tagged-set/blob/master/LICENSE)
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/rena2damas/remote-opencv-streaming-live-video/blob/master/LICENSE)
 
 ## Description
 
