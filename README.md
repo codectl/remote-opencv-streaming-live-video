@@ -13,7 +13,7 @@ The streaming process can be summed into the following steps:
 4. Deserialize the data into a jpeg image
 5. Serve the result in the web page
 
-The web framkework used for the webserver is [Flask](http://flask.pocoo.org/). For example purposes, we will be using laptop's webcam image straight away.
+The web framework used for the webserver is [Flask](http://flask.pocoo.org/). For example purposes, we will be using laptop's webcam image straight away.
 
 ## Install
 This project runs with Python. Also install the following Python dependencies (pip makes it dead simple):
