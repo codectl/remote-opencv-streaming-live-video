@@ -1,26 +1,27 @@
 import cv2
 import numpy as np
 import socket
-import sys
-import pickle
 import struct
-import StringIO
-import json
+from io import BytesIO
 
-cap=cv2.VideoCapture(0)
-clientsocket=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-clientsocket.connect(('localhost',8089))
+# Capture frame
+cap = cv2.VideoCapture(0)
 
-while(cap.isOpened()):
-  ret,frame=cap.read()
+clientsocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+clientsocket.connect(('localhost', 8080))
 
-  memfile = StringIO.StringIO()
-  np.save(memfile, frame)
-  memfile.seek(0)
-  data = json.dumps(memfile.read().decode('latin-1'))
+while (cap.isOpened()):
+    ret, frame = cap.read()
 
-  clientsocket.sendall(struct.pack("L", len(data))+data)
-  if cv2.waitKey(1) & 0xFF == ord('q'):
-    break
+    memfile = BytesIO()
+    np.save(memfile, frame)
+    memfile.seek(0)
+    data = memfile.read()
+
+    # Send form byte array: frame size + frame content
+    clientsocket.sendall(struct.pack("L", len(data)) + data)
+
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
 
 cap.release()

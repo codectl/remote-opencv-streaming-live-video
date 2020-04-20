@@ -4,7 +4,7 @@ from streamer import Streamer
 app = Flask(__name__)
 
 def gen():
-  streamer = Streamer('localhost', 8089)
+  streamer = Streamer('localhost', 8080)
   streamer.start()
 
   while True:

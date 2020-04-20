@@ -1,76 +1,78 @@
 import cv2
-import threading
+import numpy
 import socket
 import struct
-import StringIO
-import json
-import numpy
+import threading
+from io import BytesIO
 
-class Streamer (threading.Thread):
-  def __init__(self, hostname, port):
-    threading.Thread.__init__(self)
 
-    self.hostname = hostname
-    self.port = port
-    self.connected = False
-    self.jpeg = None
+class Streamer(threading.Thread):
 
-  def run(self):
+    def __init__(self, hostname, port):
+        threading.Thread.__init__(self)
 
-    self.isRunning = True
+        self.hostname = hostname
+        self.port = port
+        self.connected = False
+        self.jpeg = None
+        self.running = False
 
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    print 'Socket created'
+    def run(self):
 
-    s.bind((self.hostname, self.port))
-    print 'Socket bind complete'
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        print('Socket created')
 
-    data = ""
-    payload_size = struct.calcsize("L")
+        s.bind((self.hostname, self.port))
+        print('Socket bind complete')
 
-    s.listen(10)
-    print 'Socket now listening'
+        payload_size = struct.calcsize("L")
 
-    while self.isRunning:
+        s.listen(10)
+        print('Socket now listening')
 
-      conn, addr = s.accept()
+        self.running = True
 
-      while True:
+        while self.running:
 
-        data = conn.recv(4096)
+            conn, addr = s.accept()
+            print("Connection accepted.")
 
-        if data:
-          packed_msg_size = data[:payload_size]
-          data = data[payload_size:]
-          msg_size = struct.unpack("L", packed_msg_size)[0]
+            while True:
 
-          while len(data) < msg_size:
-            data += conn.recv(10000)
+                data = conn.recv(payload_size)
 
-          frame_data = data[:msg_size]
+                if data:
+                    # Read frame size
+                    msg_size = struct.unpack("L", data)[0]
 
-          memfile = StringIO.StringIO()
-          memfile.write(json.loads(frame_data).encode('latin-1'))
-          memfile.seek(0)
-          frame = numpy.load(memfile)
+                    # Read the payload (the actual frame)
+                    data = b''
+                    while len(data) < msg_size:
+                        data += conn.recv(msg_size-len(data))
 
-          ret, jpeg = cv2.imencode('.jpg', frame)
-          self.jpeg = jpeg
+                    # Convert the byte array to a 'jpeg' format
+                    memfile = BytesIO()
+                    memfile.write(data)
+                    memfile.seek(0)
+                    frame = numpy.load(memfile)
 
-          self.connected = True
+                    ret, jpeg = cv2.imencode('.jpg', frame)
+                    self.jpeg = jpeg
 
-        else:
-          conn.close()
-          self.connected = False
-          break
+                    self.connected = True
 
-    self.connected = False
+                else:
+                    conn.close()
+                    self.connected = False
+                    break
 
-  def stop(self):
-    self.isRunning = False
+        self.connected = False
 
-  def client_connected(self):
-    return self.connected
+    def stop(self):
+        self.running = False
 
-  def get_jpeg(self):
-    return self.jpeg.tobytes()
+    def client_connected(self):
+        return self.connected
+
+    def get_jpeg(self):
+        return self.jpeg.tobytes()
