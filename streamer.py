@@ -13,9 +13,9 @@ class Streamer(threading.Thread):
 
         self.hostname = hostname
         self.port = port
-        self.connected = False
-        self.jpeg = None
         self.running = False
+        self.streaming = False
+        self.jpeg = None
 
     def run(self):
 
@@ -34,8 +34,10 @@ class Streamer(threading.Thread):
 
         while self.running:
 
+            print('Start listening for connections...')
+
             conn, addr = s.accept()
-            print("Connection accepted.")
+            print("New connection accepted.")
 
             while True:
 
@@ -48,7 +50,17 @@ class Streamer(threading.Thread):
                     # Read the payload (the actual frame)
                     data = b''
                     while len(data) < msg_size:
-                        data += conn.recv(msg_size-len(data))
+                        missing_data = conn.recv(msg_size - len(data))
+                        if missing_data:
+                            data += missing_data
+                        else:
+                            # Connection interrupted
+                            self.streaming = False
+                            break
+
+                    # Skip building frame since streaming ended
+                    if self.jpeg is not None and not self.streaming:
+                        continue
 
                     # Convert the byte array to a 'jpeg' format
                     memfile = BytesIO()
@@ -59,20 +71,18 @@ class Streamer(threading.Thread):
                     ret, jpeg = cv2.imencode('.jpg', frame)
                     self.jpeg = jpeg
 
-                    self.connected = True
-
+                    self.streaming = True
                 else:
                     conn.close()
-                    self.connected = False
+                    print('Closing connection...')
+                    self.streaming = False
+                    self.jpeg = None
                     break
 
-        self.connected = False
+        print('Exit thread.')
 
     def stop(self):
         self.running = False
-
-    def client_connected(self):
-        return self.connected
 
     def get_jpeg(self):
         return self.jpeg.tobytes()
